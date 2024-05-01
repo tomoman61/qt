@@ -1,113 +1,176 @@
-import Image from "next/image";
+"use client";
 
+import { type ChangeEvent, useState } from "react";
+
+const copyToClipboard = async (
+	text: string,
+	matter: string,
+	hypothesis: string,
+	survey: string,
+  memo: string,
+) => {
+	try {
+		navigator.clipboard.writeText(`#${text}\n\n#事象\n${matter}\n\n#仮説\n${hypothesis}\n\n#調査したこと\n${survey}\n\n#備考\n${memo}`);
+	} catch (err) {
+		console.error(err);
+	}
+};
 export default function Home() {
+	// 質問のタイプ
+	const [type, setType] = useState<string>("");
+	// #解決したい事象・エラー
+	const [matter, setMatter] = useState<string>("");
+	// 仮説
+	const [hypothesis, setHypothesis] = useState<string>("");
+  // 調査したこと
+	const [survey, setSurvey] = useState<string>("");
+  // 備考
+	const [memo, setMemo] = useState<string>("");
+
+	// クリア
+	const clear = () => {
+		setType("");
+		setMatter("");
+		setHypothesis("");
+    setSurvey("");
+    setMemo("");
+	};
+
+	return (
+		<main className="container mx-5">
+			<button
+				type="button"
+				className="btn btn-primary my-3 mr-36 tooltip tooltip-right"
+				data-tip="コピー"
+				onClick={() => copyToClipboard(type, matter, hypothesis, survey, memo)}
+			>
+				<IconContentCopy />
+			</button>
+			<button
+				type="button"
+				className="btn btn-secondary my-3 tooltip tooltip-right"
+				data-tip="クリア"
+				onClick={clear}
+			>
+				<IconClear />
+			</button>
+			<label className="form-control max-w-xs mb-3">
+				<div className="label">
+					<span className="label-text">#質問タイプ</span>
+				</div>
+				<select
+					name={type}
+					value={type}
+					id="type"
+					className="select select-bordered w-full max-w-xs"
+					onChange={(e: ChangeEvent<HTMLSelectElement>) =>
+						setType(e.target.value)
+					}
+				>
+					<option value="">-</option>
+					<option value="質問">質問</option>
+					<option value="相談">相談</option>
+					<option value="確認">確認</option>
+					<option value="エラー">エラー</option>
+					<option value="仕様確認">仕様確認</option>
+					<option value="その他">その他</option>
+				</select>
+			</label>
+
+			<label className="form-control max-w-xs mb-3">
+				<div className="label">
+					<span className="label-text">#解決したい事象・エラー</span>
+				</div>
+				<textarea
+					className="textarea textarea-bordered resize-none"
+					name={matter}
+					value={matter}
+          id="matter"
+					onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
+						setMatter(e.target.value)
+					}
+				/>
+			</label>
+
+			<label className="form-control max-w-xs mb-3">
+				<div className="label">
+					<span className="label-text">#仮説</span>
+				</div>
+				<textarea
+					className="textarea textarea-bordered resize-none"
+					name={hypothesis}
+          value={hypothesis}
+          id="hypothesis"
+					onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
+						setHypothesis(e.target.value)
+					}
+				/>
+			</label>
+
+      <label className="form-control max-w-xs mb-3">
+				<div className="label">
+					<span className="label-text">#調査したこと</span>
+				</div>
+				<textarea
+					className="textarea textarea-bordered resize-none"
+					name={survey}
+          value={survey}
+          id="survey"
+					onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
+						setSurvey(e.target.value)
+					}
+				/>
+			</label>
+
+      <label className="form-control max-w-xs mb-3">
+				<div className="label">
+					<span className="label-text">#備考</span>
+				</div>
+				<textarea
+					className="textarea textarea-bordered resize-none"
+					name={memo}
+          value={memo}
+          id="memo"
+					onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
+						setMemo(e.target.value)
+					}
+				/>
+			</label>
+		</main>
+	);
+}
+
+function IconContentCopy(props: React.SVGProps<SVGSVGElement>) {
+	return (
+		// biome-ignore lint/a11y/noSvgWithoutTitle: <explanation>
+		<svg
+			viewBox="0 0 24 24"
+			fill="currentColor"
+			height="1.8em"
+			width="1.8em"
+			{...props}
+		>
+			<path d="M19 21H8V7h11m0-2H8a2 2 0 00-2 2v14a2 2 0 002 2h11a2 2 0 002-2V7a2 2 0 00-2-2m-3-4H4a2 2 0 00-2 2v14h2V3h12V1z" />
+		</svg>
+	);
+}
+
+
+function IconClear(props: React.SVGProps<SVGSVGElement>) {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">src/app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:size-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
-
-      <div className="relative z-[-1] flex place-items-center before:absolute before:h-[300px] before:w-full before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 sm:before:w-[480px] sm:after:w-[240px] before:lg:h-[360px]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className="mb-32 grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Learn{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Templates{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Explore starter templates for Next.js.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Deploy{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-balance text-sm opacity-50">
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+    // biome-ignore lint/a11y/noSvgWithoutTitle: <explanation>
+    <svg
+      viewBox="0 0 1024 1024"
+      fill="currentColor"
+      height="1.7em"
+      width="1.7em"
+      {...props}
+    >
+      <defs>
+        <style />
+      </defs>
+      <path d="M899.1 869.6l-53-305.6H864c14.4 0 26-11.6 26-26V346c0-14.4-11.6-26-26-26H618V138c0-14.4-11.6-26-26-26H432c-14.4 0-26 11.6-26 26v182H160c-14.4 0-26 11.6-26 26v192c0 14.4 11.6 26 26 26h17.9l-53 305.6c-.3 1.5-.4 3-.4 4.4 0 14.4 11.6 26 26 26h723c1.5 0 3-.1 4.4-.4 14.2-2.4 23.7-15.9 21.2-30zM204 390h272V182h72v208h272v104H204V390zm468 440V674c0-4.4-3.6-8-8-8h-48c-4.4 0-8 3.6-8 8v156H416V674c0-4.4-3.6-8-8-8h-48c-4.4 0-8 3.6-8 8v156H202.8l45.1-260H776l45.1 260H672z" />
+    </svg>
   );
 }
+
